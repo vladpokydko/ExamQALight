@@ -39,8 +39,24 @@ Steps:
 Expected result:
 Post-conditions:
 
-#005 Check the age restriction for alcohol products
+#005 Check the age restriction for alcohol products (invalid case)
 Pre-conditions:
+Main URL is opened, Age verification pop-up is displayed.
+
 Steps:
+1. On the age verification pop-up click on "Ні" (//*[@id="__next"]/footer/div[1]/div/div[1]/a/button[text()='Ні']) button and verify that the user is not allowed to access the website and is redirected to a google.com page.
 Expected result:
+The user is not allowed to access the website and is redirected to a google.com page.
 Post-conditions:
+Close the browser.
+
+#006 Check the age restriction for alcohol products (valid case)
+Pre-conditions:
+Main URL is opened, Age verification pop-up is displayed.
+
+Steps:
+1. On the age verification pop-up click on "Так" button (//*[@id="__next"]/footer/div[1]/div/div[1]/div/button[text()='Так']) and verify that the user is redirected to a https://okwine.ua/ page.
+Expected result:
+The user is allowed to access the website and is redirected to a https://okwine.ua/ page.
+Post-conditions:
+Close the browser.

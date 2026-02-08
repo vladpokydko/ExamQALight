@@ -6,3 +6,7 @@ button.catalog = //button[@data-testid='sub-header-menu-btn']
 #CatalogDropdown
 dropdown.catalogCategoryViski = //div/ul/li/a[@href='/ua/viski']
 dropdown.catalogCategoryViskiOdnosolodovyi = //div/ul/li[2]/div/ul/li[1]/a[@href='/ua/single-malt-scotch-whiskey']
+
+#AgeVerificationPopup
+button.ageVerificationNo = //*[@id="__next"]/footer/div[1]/div/div[1]/a/button[text()='Ні']
+button.ageVerificationYes = //*[@id="__next"]/footer/div[1]/div/div[1]/div/button[text()='Так']
