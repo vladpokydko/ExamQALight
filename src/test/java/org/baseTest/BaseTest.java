@@ -11,7 +11,7 @@ import org.pages.PageProvider;
 import java.time.Duration;
 
 public class BaseTest {
-    private WebDriver webDriver;
+    protected WebDriver webDriver;
     protected Logger logger = Logger.getLogger(getClass());
     protected PageProvider pageProvider;
 
@@ -26,6 +26,8 @@ public class BaseTest {
         //неявне очікування на дію
         webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         logger.info("Browser was opened");
+        webDriver.get("https://okwine.ua/");
+        logger.info("Site was opened");
 
         pageProvider = new PageProvider(webDriver);
     }

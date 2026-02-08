@@ -13,4 +13,7 @@ public class PageProvider {
         return new HomePage(webDriver);
     }
 
+    public AgeRestrictionPage openAgeRestrictionPage() {
+        return new AgeRestrictionPage(webDriver);
+    }
 }
