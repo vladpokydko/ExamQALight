@@ -1,0 +1,46 @@
+#001 Check the correctness of catalog
+
+Pre-conditions:
+Main URL is opened, user is on the main page of the online store, catalog is visible on the page.
+
+Steps:
+1. Click on the catalog menu (button.catalog = //button[@data-testid='sub-header-menu-btn'])
+2. Verify that the catalog dropdown is displayed and contains the expected categories
+(e.g., "Акції", "Власний імпорт", "Віскі", "Міцний алкоголь", "Лікери", "Вина", "Шампанське та ігристе",
+"Пиво", "Слабоалкогольні напої", "Безалкогольні напої", "Напої", "Продукти", "Аксесуари та подарунки", "Міні та Магнуми")
+3. Hover the "Віскі" category (//div/ul/li[1]/a[@href='/ua/viski']) from the dropdown and verify that the subcategories are displayed (e.g., "Категорія", "Бренди", "Країна")
+4. Click on the "Односолодовий віскі" subcategory (//div/ul/li[2]/div/ul/li[1]/a[@href='/ua/single-malt-scotch-whiskey']) and verify that the user is navigated to the correct page with the list of products in that category.
+
+
+Expected result:
+The user is redirected to the page with the list of products in the "Односолодовий віскі" category (//h1[text()='Односолодовий віскі'])
+
+Post-conditions:
+Close the browser.
+
+#002 Check the correctness of product details
+
+Pre-conditions:
+
+Steps:
+
+Expected result:
+Post-conditions:
+
+#003 Check the correctness of shopping cart
+Pre-conditions:
+Steps:
+Expected result:
+Post-conditions:
+
+#004 Check the correctness of product search by keyword
+Pre-conditions:
+Steps:
+Expected result:
+Post-conditions:
+
+#005 Check the age restriction for alcohol products
+Pre-conditions:
+Steps:
+Expected result:
+Post-conditions:

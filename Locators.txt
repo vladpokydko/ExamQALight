@@ -1,0 +1,8 @@
+#LoginPage
+
+#HomePage
+button.catalog = //button[@data-testid='sub-header-menu-btn']
+
+#CatalogDropdown
+dropdown.catalogCategoryViski = //div/ul/li/a[@href='/ua/viski']
+dropdown.catalogCategoryViskiOdnosolodovyi = //div/ul/li[2]/div/ul/li[1]/a[@href='/ua/single-malt-scotch-whiskey']
