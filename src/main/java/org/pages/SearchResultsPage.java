@@ -36,4 +36,6 @@ public class SearchResultsPage {
         return new ProductsPage(driver);
     }
 
+
+
 }
