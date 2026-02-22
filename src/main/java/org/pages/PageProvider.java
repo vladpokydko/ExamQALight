@@ -9,10 +9,6 @@ public class PageProvider {
         this.webDriver = webDriver;
     }
 
-    public HomePage getHomePage(){
-        return new HomePage(webDriver);
-    }
-
     public AgeRestrictionPage openAgeRestrictionPage() {
         return new AgeRestrictionPage(webDriver);
     }
@@ -23,5 +19,9 @@ public class PageProvider {
 
     public ProductsPage getProductsPage() {
         return new ProductsPage(webDriver);
+    }
+
+    public HomePage getHomePage() {
+        return new HomePage(webDriver);
     }
 }
