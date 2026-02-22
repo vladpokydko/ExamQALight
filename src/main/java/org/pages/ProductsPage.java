@@ -2,6 +2,7 @@ package org.pages;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,11 +27,16 @@ public class ProductsPage {
     @FindBy(xpath = "//h1[text()='Ром Дед Менс Фінгерс']")
     private WebElement pageTitleElement;
 
-    @FindBy(xpath = "//button[@data-testid='buyToCartButton']")
-    private WebElement addToCartButton;
+private WebElement addToCartButton;
 
     @FindBy(tagName = "h1")
     private WebElement productTitleElement;
+    
+    @FindBy(xpath = "*//span[text()=\"1\"]")
+    private WebElement productAddedToCartMessage;
+
+    @FindBy(xpath = "*//a[@href=\"/ua/cart\"]")
+    private WebElement cartIcon;
 
     public ProductsPage checkIsRedirectedToProductDetailsPage(String productName) {
         wait.until(ExpectedConditions.visibilityOf(productTitleElement));
@@ -46,12 +52,49 @@ public class ProductsPage {
     }
 
     public ProductsPage checkAppearanceOfAddToCartButton() {
-        wait.until(ExpectedConditions.visibilityOf(addToCartButton));
+        By addToCartLocator = By.xpath("//*[@id=\"__next\"]/main/div/section[1]/div[2]/ul[1]/div[2]/li/div/div[2]/button");
+
+        // Очікуємо появу кнопки у DOM та її видимість
+        WebElement addToCartButton = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(addToCartLocator));
+
+        // Прокрутка в центр екрану для надійності
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({behavior:'auto', block:'center'});", addToCartButton);
+
+        // Перевірка видимості
         if (addToCartButton.isDisplayed()) {
             logger.info("Add to Cart button is displayed.");
         } else {
             logger.error("Add to Cart button is not displayed.");
         }
+
         return this;
+    }
+
+    public ProductsPage clickAddToCartButton() {
+        By addToCartLocator = By.xpath("//*[@id=\"__next\"]/main/div/section[1]/div[2]/ul[1]/div[2]/li/div/div[2]/button");
+
+        // Чекаємо, поки кнопка стане клікабельною
+        WebElement addToCartButton = new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(ExpectedConditions.elementToBeClickable(addToCartLocator));
+
+        // Прокрутка до кнопки
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({behavior:'auto', block:'center'});", addToCartButton);
+
+        // JS-клік для надійності
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCartButton);
+        logger.info("Clicked 'Add to Cart' button using JS executor");
+
+        // Повертаємо CartPage після того, як елементи сторінки завантажилися
+        return this;
+    }
+
+    public CartPage clickOnCartIcon() {
+        wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
+        logger.info("Clicked on cart icon.");
+        return new CartPage(driver);
+
     }
 }

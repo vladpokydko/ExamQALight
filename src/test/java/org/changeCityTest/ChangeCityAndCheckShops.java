@@ -16,11 +16,11 @@ public class ChangeCityAndCheckShops extends BaseTest {
 
         pageProvider
                 .getHomePage()
-                .clickNoButton()                  // натиснути "Ні"
-                .enterCityName("Львів")           // ввести "Львів"
-                .selectCity("Львів")              // обрати зі списку
-                .clickContacts()                  // натиснути "Контакти"
-                .verifySelectedCityAndDistricts();    // перевірити, що написано "Львів"
+                .clickNoButton()
+                .enterCityName("Львів")
+                .selectCity("Львів")
+                .clickContacts()
+                .verifySelectedCityAndDistricts();
 
         logger.info("TC: Change city passed");
     }
