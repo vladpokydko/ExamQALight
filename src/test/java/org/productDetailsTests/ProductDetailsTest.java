@@ -30,6 +30,6 @@ public class ProductDetailsTest extends BaseTest {
                 .getProductDetailsPage()
                 .checkIsRedirectedToProductDetailsPage("Ром Дед Менс Фінгерс");
 
-        logger.info("TC: Search product passed");
+        logger.info("TC: Product details page appearance passed");
     }
 }
