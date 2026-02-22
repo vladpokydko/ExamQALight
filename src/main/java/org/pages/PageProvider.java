@@ -24,4 +24,12 @@ public class PageProvider {
     public HomePage getHomePage() {
         return new HomePage(webDriver);
     }
+
+    public SearchResultsPage getSearchResultsPage() {
+        return new SearchResultsPage(webDriver);
+    }
+
+    public ProductsPage getProductDetailsPage() {
+        return new ProductsPage(webDriver);
+    }
 }

@@ -23,8 +23,17 @@ public class SearchResultsPage {
     @FindBy(xpath = "//p[text()=\"Dead Man's Fingers\"]")
     private WebElement productTitle;
 
+    @FindBy(xpath = "//a[@data-testid='integrationProductLink'][1]")
+    private WebElement firstProductLink;
+
     public boolean isProductDisplayed() {
         wait.until(ExpectedConditions.visibilityOf(productTitle));
         return productTitle.isDisplayed();
     }
+
+    public ProductsPage clickOnProduct() {
+        wait.until(ExpectedConditions.elementToBeClickable(firstProductLink)).click();
+        return new ProductsPage(driver);
+    }
+
 }
