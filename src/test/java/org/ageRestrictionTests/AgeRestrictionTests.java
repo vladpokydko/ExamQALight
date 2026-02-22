@@ -11,18 +11,14 @@ public class AgeRestrictionTests extends BaseTest {
      */
     @Test
     public void checkAgeRestrictionInvalidCase() {
-        logger.info("TC #005: Invalid age verification started");
-        pageProvider.openAgeRestrictionPage().clickNo();
-        
-        String currentUrl = webDriver.getCurrentUrl();
-        logger.info("Redirected URL: " + currentUrl);
+        logger.info("TC #001: Invalid age verification started");
 
-        Assert.assertTrue(
-                "User should be redirected to google.com",
-                currentUrl.contains("google.com")
-        );
+        pageProvider
+                .openAgeRestrictionPage()
+                .clickNo()
+                .checkIsRedirectedToGoogle();
 
-        logger.info("TC #005: Passed");
+        logger.info("TC #001: Passed");
     }
 
     /**
@@ -30,18 +26,13 @@ public class AgeRestrictionTests extends BaseTest {
      */
     @Test
     public void checkAgeRestrictionValidCase() {
-        logger.info("TC #006: Valid age verification started");
-        pageProvider.openAgeRestrictionPage().clickYes();
+        logger.info("TC #002: Valid age verification started");
 
-        String currentUrl = webDriver.getCurrentUrl();
-        logger.info("Redirected URL: " + currentUrl);
+        pageProvider
+                .openAgeRestrictionPage()
+                .clickYes()
+                .checkIsRedirectedToHomePage();
 
-        Assert.assertEquals(
-                "User should be redirected to OKWINE main page",
-                "https://okwine.ua/",
-                currentUrl
-        );
-
-        logger.info("TC #006: Passed");
+        logger.info("TC #002: Passed");
     }
 }

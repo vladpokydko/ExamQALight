@@ -16,4 +16,12 @@ public class PageProvider {
     public AgeRestrictionPage openAgeRestrictionPage() {
         return new AgeRestrictionPage(webDriver);
     }
+
+    public CatalogPage getCatalogPage() {
+        return new CatalogPage(webDriver);
+    }
+
+    public ProductsPage getProductsPage() {
+        return new ProductsPage(webDriver);
+    }
 }
