@@ -1,9 +1,7 @@
 package org.pages;
 
 import org.apache.log4j.Logger;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -97,7 +95,25 @@ public class HomePage {
 
     // Обрати місто зі списку
     public HomePage selectCity(String cityName) {
-        wait.until(ExpectedConditions.elementToBeClickable(lvivOption)).click();
+        // Чекаємо, поки потрібний елемент стане видимим і clickable
+        wait.until(driver -> {
+            try {
+                WebElement cityOption = driver.findElement(By.xpath("//span[text()='" + cityName + "']"));
+                return cityOption.isDisplayed() && cityOption.isEnabled();
+            } catch (StaleElementReferenceException e) {
+                return false; // повторимо чек, якщо елемент став stale
+            }
+        });
+
+        // Після очікування отримуємо елемент знову
+        WebElement cityOption = driver.findElement(By.xpath("//span[text()='" + cityName + "']"));
+
+        // Скролимо до елемента і клікаємо через JS
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({behavior:'auto', block:'center'});", cityOption);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", cityOption);
+
         logger.info("Selected city: " + cityName);
         return this;
     }

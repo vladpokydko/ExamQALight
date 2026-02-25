@@ -1,10 +1,7 @@
 package org.pages;
 
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,6 +13,7 @@ public class CartPage {
     public Logger logger = Logger.getLogger(getClass());
     private WebDriver driver;
     private WebDriverWait wait;
+
 
     @FindBy(xpath = "*//h1[@id=\"UserForm\"]")
     private WebElement cartPageTitle;
@@ -43,18 +41,38 @@ public class CartPage {
 
     @FindBy(xpath = "*//span[text()=\"Оплата готівкою\"]")
     private WebElement paymentMethodDropdown;
-    
+
     @FindBy(xpath = "*//textarea[@id=\"commentId0\"]")
     private WebElement commentInput;
 
     @FindBy(xpath = "*//input[@placeholder=\"Почніть вводити адресу\"]")
-    private WebElement deliveryAddressInput;
+    private WebElement deliveryAddressSearchInput;
 
     @FindBy(xpath = "*//span[text()=\"Забрати тут\"]")
     private WebElement deliveryAddressOption;
 
-    
+    @FindBy(xpath = "//div[contains(text(),'Оплата готівкою')]")
+    private WebElement cashPaymentOption;
 
+
+    protected void safeClick(By locator) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        );
+
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", element);
+
+        wait.until(ExpectedConditions.elementToBeClickable(locator));
+
+        try {
+            element.click(); // нормальний клік
+        } catch (ElementClickInterceptedException e) {
+            ((JavascriptExecutor) driver)
+                    .executeScript("arguments[0].click();", element); // fallback
+        }
+    }
 
 
     public CartPage(WebDriver driver) {
@@ -171,46 +189,50 @@ public class CartPage {
 
     public CartPage chooseInDropdownDeliveryMethod(String deliveryMethod) {
 
-        By optionLocator = By.xpath("//span[text()='" + deliveryMethod + "']");
-
-        WebElement option = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(optionLocator)
+        By optionLocator = By.xpath(
+                "//span[text()='" + deliveryMethod + "']/ancestor::*[self::label or self::div][1]"
         );
 
-        // Скролимо до елемента
+        safeClick(optionLocator);
+
+        WebElement option = driver.findElement(optionLocator);
+
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].scrollIntoView({block:'center'});", option);
 
-        // Чекаємо щоб став клікабельним
-        wait.until(ExpectedConditions.elementToBeClickable(option));
-
-        // Клік через JS (обхід перехоплення)
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].click();", option);
+        wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
 
         logger.info("Selected delivery method: " + deliveryMethod);
+
+        // Чекаємо повного зникнення dropdown overlay
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//div[contains(@class,'dropdown') and contains(@class,'open')]")
+        ));
+
+        // Чекаємо появу блоку магазинів
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@placeholder='Почніть вводити адресу']")
+        ));
 
         return this;
     }
 
     public CartPage chooseInDropdownPaymentMethod(String paymentMethod) {
 
-        By optionLocator = By.xpath("//span[text()='" + paymentMethod + "']");
+        logger.info("Selecting payment method: Готівка");
 
-        WebElement option = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(optionLocator)
-        );
+        // Чекаємо, поки елемент стане видимим
+        wait.until(ExpectedConditions.visibilityOf(cashPaymentOption));
 
+        // Скролимо центром вікна
         ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({block:'center'});", option);
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", cashPaymentOption);
 
-        wait.until(ExpectedConditions.elementToBeClickable(option));
-
+        // Клікаємо через JS
         ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].click();", option);
+                .executeScript("arguments[0].click();", cashPaymentOption);
 
-        logger.info("Selected payment method: " + paymentMethod);
-
+        logger.info("Selected payment method: Готівка");
         return this;
     }
 
@@ -255,5 +277,48 @@ public class CartPage {
         logger.info("Selected delivery address from dropdown: " + address);
 
         return this;
+    }
+
+    public CartPage filterPickupStores(String address) {
+
+        wait.until(ExpectedConditions.visibilityOf(deliveryAddressSearchInput));
+        wait.until(ExpectedConditions.elementToBeClickable(deliveryAddressSearchInput));
+
+        deliveryAddressSearchInput.click();
+        deliveryAddressSearchInput.clear();
+        deliveryAddressSearchInput.sendKeys(address);
+
+        logger.info("Filtered pickup stores by address: " + address);
+
+        return this;
+    }
+
+    public CartPage choosePickupStore(String address) {
+        logger.info("Selecting pickup store: " + address);
+
+        // Чекаємо, поки кнопка "Забрати тут" стане видимою
+        wait.until(ExpectedConditions.visibilityOf(deliveryAddressOption));
+
+        // Скролимо до кнопки центром вікна
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", deliveryAddressOption);
+
+        // Клікаємо через JS (обхід можливих intercept)
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", deliveryAddressOption);
+
+        logger.info("Selected pickup store: " + address);
+        return this;
+    }
+
+
+    public void enterCommentToTheOrder(String коментарДоЗамовлення) {
+        wait.until(ExpectedConditions.elementToBeClickable(commentInput));
+
+        commentInput.click();
+        commentInput.clear();
+        commentInput.sendKeys(коментарДоЗамовлення);
+
+        logger.info("Entered comment to the order: " + коментарДоЗамовлення);
     }
 }

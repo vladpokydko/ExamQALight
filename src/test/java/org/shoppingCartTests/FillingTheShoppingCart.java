@@ -38,9 +38,11 @@ public class FillingTheShoppingCart extends BaseTest {
                 .fillPhoneInput("+380937667166")
                 .fillEmailInput("test@test.co")
                 .chooseInDropdownDeliveryMethod("Самовивіз")
-                .chooseDeliveryAddressFromDropdown("Драгоманова")
-                .chooseInDropdownPaymentMethod("Готівка");
-
+                .filterPickupStores("Драгоманова")
+                .choosePickupStore("Драгоманова")
+                .chooseInDropdownPaymentMethod("Оплата готівкою")
+                .enterCommentToTheOrder("Коментар до замовлення");
+        //.clickOnButtonPlaceOrder()
 
 
         logger.info("TC: Shopping Cart appearance passed");

@@ -32,6 +32,7 @@ public class SearchResultsPage {
     }
 
     public ProductsPage clickOnProduct() {
+        // Чекаємо, поки посилання на продукт стане клікабельним, і клікаємо по ньому
         wait.until(ExpectedConditions.elementToBeClickable(firstProductLink)).click();
         return new ProductsPage(driver);
     }
