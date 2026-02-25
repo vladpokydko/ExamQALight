@@ -51,26 +51,6 @@ private WebElement addToCartButton;
         return this;
     }
 
-    public ProductsPage checkAppearanceOfAddToCartButton() {
-        By addToCartLocator = By.xpath("//*[@id=\"__next\"]/main/div/section[1]/div[2]/ul[1]/div[2]/li/div/div[2]/button");
-
-        // Очікуємо появу кнопки у DOM та її видимість
-        WebElement addToCartButton = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(addToCartLocator));
-
-        // Прокрутка в центр екрану для надійності
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({behavior:'auto', block:'center'});", addToCartButton);
-
-        // Перевірка видимості
-        if (addToCartButton.isDisplayed()) {
-            logger.info("Add to Cart button is displayed.");
-        } else {
-            logger.error("Add to Cart button is not displayed.");
-        }
-
-        return this;
-    }
 
     public ProductsPage clickAddToCartButton() {
         By addToCartLocator = By.xpath("//*[@id=\"__next\"]/main/div/section[1]/div[2]/ul[1]/div[2]/li/div/div[2]/button");

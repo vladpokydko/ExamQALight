@@ -124,16 +124,6 @@ public class CartPage {
     }
 
 
-    public ProductsPage checkIsProductAddedToCartMessageDisplayed() {
-        wait.until(driver -> productInCart.isDisplayed());
-        if (productInCart.isDisplayed()) {
-            logger.info("Product added to cart message is displayed.");
-        } else {
-            logger.error("Product added to cart message is not displayed.");
-        }
-        return new ProductsPage(driver);
-    }
-
     public CartPage fillNameInput(String name) {
 
         wait.until(ExpectedConditions.elementToBeClickable(nameInput));
@@ -236,48 +226,6 @@ public class CartPage {
         return this;
     }
 
-    public CartPage enterDeliveryAddress(String address) {
-
-        By addressInputLocator = By.xpath("//input[contains(@placeholder,'Введіть адресу')]");
-
-        WebElement addressInput = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(addressInputLocator)
-        );
-
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({block:'center'});", addressInput);
-
-        wait.until(ExpectedConditions.elementToBeClickable(addressInput));
-
-        addressInput.click();
-        addressInput.clear();
-        addressInput.sendKeys(address);
-
-        logger.info("Entered delivery address: " + address);
-
-        return this;
-    }
-
-    public CartPage chooseDeliveryAddressFromDropdown(String address) {
-
-        By dropdownOption = By.xpath("//div[contains(text(),'" + address + "')]");
-
-        WebElement option = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(dropdownOption)
-        );
-
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({block:'center'});", option);
-
-        wait.until(ExpectedConditions.elementToBeClickable(option));
-
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].click();", option);
-
-        logger.info("Selected delivery address from dropdown: " + address);
-
-        return this;
-    }
 
     public CartPage filterPickupStores(String address) {
 
